@@ -101,8 +101,16 @@ def detect_palm(model, ds, x, y, winW, winH, minmaxlist, scorethreshold):
     image = preprocess_image(normalizedImg)
     image, scale = resize_image(image)
 
-    # process image
-    boxes, scores, labels = model.predict_on_batch(np.expand_dims(image, axis=0))
+    # process image via onnxruntime (model is an ort.InferenceSession)
+    input_name = model.get_inputs()[0].name
+    outputs = model.run(
+        None,
+        {input_name: np.expand_dims(image, axis=0).astype(np.float32)}
+    )
+    output_names = [o.name for o in model.get_outputs()]
+    boxes  = outputs[output_names.index('filtered_detections')]
+    scores = outputs[output_names.index('filtered_detections_1')]
+    labels = outputs[output_names.index('filtered_detections_2')]
 
     # correct for image scale
     boxes /= scale
@@ -119,7 +127,7 @@ def detect_palm(model, ds, x, y, winW, winH, minmaxlist, scorethreshold):
     # select detections
     image_boxes = boxes[0, indices[scores_sort], :]
 
-    for i in indices:
+    for i in range(len(image_boxes)):
         b = np.array(image_boxes[i,:]).astype(int)
         x1 = b[0] + x
         y1 = b[1] + y
@@ -235,7 +243,10 @@ class OptimalIpbAlgorithm(QgsProcessingAlgorithm):
 
         # load model
         model_name = modelsList[self.parameterAsEnum(parameters, self.OPTIMAL, context)]
-        model = load_model(os.path.join(cmd_folder, 'models/', model_name), backbone_name='resnet101')
+        model = ort.InferenceSession(
+            os.path.join(cmd_folder, 'models', model_name),
+            providers=['CPUExecutionProvider']
+        )
 
         # get CRS from raster source
         source = self.parameterAsRasterLayer(parameters, self.INPUT, context)
@@ -294,7 +305,7 @@ class OptimalIpbAlgorithm(QgsProcessingAlgorithm):
         outFeat.setFields(fields)
 
         # Prepare sink for output
-        type_val = self.parameterAsDouble(parameters, self.TYPE, context)
+        type_val = self.parameterAsEnum(parameters, self.TYPE, context)
         type_opt = geom_type(type_val)
         (sink, dest_id) = self.parameterAsSink(parameters, self.OUTPUT, context, fields, type_opt, source.crs())
 
