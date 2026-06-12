@@ -34,3 +34,35 @@ Plans:
 **Depends on:** (none)
 
 ---
+
+### Phase 2: Palm Detection Ensemble
+**Goal:** Find and verify two working palm detection plugins, then add a detector-agnostic `PalmEnsembleAlgorithm` to the Processing Toolbox that merges any two palm centroid layers into a confidence-scored union output.
+**Mode:** standard
+
+**Requirements:**
+- ENS-01: Two QGIS-compatible palm detection plugins installed and individually verified (Plugin A and Plugin B)
+- ENS-02: Both plugins produce point or polygon output on the same test raster
+- ENS-03: PalmEnsembleAlgorithm registered in OPTIMAL-IPB Processing provider
+- ENS-04: Ensemble output has fields: confidence (1.0/0.5), source (both/layer_name), score_a, score_b
+- ENS-05: No crash on empty input from either layer; CRS mismatch raises clear error
+
+**Plans:** 2 plans (wave-gated)
+
+Plans:
+- [ ] 02-01-PLAN.md — Research + sequential install/test of palm detection candidates (ENS-01, ENS-02) — Wave 1
+- [ ] 02-02-PLAN.md — PalmEnsembleAlgorithm implementation (ENS-03, ENS-04, ENS-05) — Wave 2 (gate: 02-01-SUMMARY.md must exist)
+
+**Success Criteria:**
+1. Two confirmed plugins (Plugin A and Plugin B) each produce detections on the same test raster
+2. PalmEnsembleAlgorithm appears in Processing Toolbox under OPTIMAL-IPB
+3. Matched palm pairs (within threshold) output at confidence=1.0, source="both"
+4. Unmatched palms output at confidence=0.5 with source=layer name
+5. Empty input handled without crash; Log Messages shows warning
+6. No hardcoded reference to OPTIMAL-IPB as a required ensemble participant
+
+**Depends on:** Phase 01-qgis-312-compat
+
+**Spec:** docs/superpowers/specs/2026-06-12-palm-ensemble-design.md
+**Detail plans:** docs/superpowers/plans/2026-06-12-palm-ensemble-wave1-plugin-research.md, docs/superpowers/plans/2026-06-12-palm-ensemble-wave2-algorithm.md
+
+---
