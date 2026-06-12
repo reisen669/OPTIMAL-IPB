@@ -1,13 +1,13 @@
 # Project State — optimal-ipb
 
 ## Status
-Phase 1 in progress — Plan 01-01 complete, advancing to Plan 01-02.
+Phase 1 in progress — Plan 01-02 complete. Phase 1 core migration done.
 
 ## Current Phase
 Phase 1: QGIS 3.12 Compatibility & ONNX Inference
 
 ## Current Plan
-01-02-PLAN.md — Replace tf_keras inference with onnxruntime, fix detect_palm() bugs, update model selector
+01-02-PLAN.md — COMPLETE. Plugin now uses onnxruntime for inference with no tensorflow dependency.
 
 ## Completed Work (pre-planning session)
 - __init__.py: qgis_gdal_env conda env injected via sys.path + os.add_dll_directory
@@ -25,16 +25,21 @@ Phase 1: QGIS 3.12 Compatibility & ONNX Inference
 | tf_keras for conversion only | Keras 2 compat layer; not needed at runtime after ONNX |
 | MSVC 14.50 for Cython build | Available at C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools |
 | conda defaults channel for onnxruntime | Installed onnxruntime 1.24.4 via conda defaults; no conda-forge pin needed; no solver conflicts |
+| Map ONNX outputs by name not index | filtered_detections/1/2 mapped via output_names.index() for robustness against model re-exports |
+| range(len(image_boxes)) for iteration | Fixes IndexError where raw indices values exceeded re-indexed image_boxes length |
+| parameterAsEnum for TYPE | Returns int (0/1/2) matching geometry comparisons; parameterAsDouble returned float |
 
 ## Completed Plans
 | Plan | Name | Commit | Date |
 |------|------|--------|------|
 | 01-01 | Install onnxruntime into qgis_gdal_env | 9ca9d53 | 2026-06-12 |
+| 01-02 | Replace tf_keras inference with onnxruntime | f8ace04 | 2026-06-12 |
 
 ## Performance Metrics
 | Phase | Plan | Duration | Tasks | Files Changed |
 |-------|------|----------|-------|---------------|
 | 01 | 01 | ~5 min | 1/1 | 0 (env-only) |
+| 01 | 02 | ~10 min | 2/2 | 1 |
 
 ---
 *Last updated: 2026-06-12*
