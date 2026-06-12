@@ -20,7 +20,7 @@ QGIS 3.44 plugin for oil palm tree detection using RetinaNet. Runs inside QGIS's
 **Plans:** 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Install onnxruntime into qgis_gdal_env (PLUG-05)
+- [x] 01-01-PLAN.md — Install onnxruntime into qgis_gdal_env (PLUG-05) — COMPLETE (2026-06-12, onnxruntime 1.24.4)
 - [ ] 01-02-PLAN.md — Replace tf_keras inference with onnxruntime, fix detect_palm() bugs, update model selector (PLUG-01, PLUG-02, PLUG-03, PLUG-04)
 - [ ] 01-03-PLAN.md — Delete cp37 .pyd artifact and commit all Phase 1 changes (PLUG-06)
 
