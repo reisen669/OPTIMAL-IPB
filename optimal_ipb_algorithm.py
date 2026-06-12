@@ -53,7 +53,6 @@ from qgis.core import (QgsProcessing,
 
 import numpy as np
 import os
-import inspect
 
 from lsnms import nms
 from osgeo import gdal
@@ -73,7 +72,7 @@ scoreses = []
 modelsList = []
 outputType = ["Point", "Bounding Box", "Circle"]
 
-cmd_folder = os.path.split(inspect.getfile(inspect.currentframe()))[0]
+cmd_folder = os.path.dirname(os.path.abspath(__file__))
 
 class minmax:
     def __init__(self, minimum, maximum):
@@ -175,9 +174,15 @@ class OptimalIpbAlgorithm(QgsProcessingAlgorithm):
         with some other properties.
         """
         modelsList.clear()
-        for file in os.listdir(os.path.join(cmd_folder, 'models/')):
-            if file.endswith(".onnx"):
-                modelsList.append(file)
+        models_dir = os.path.join(cmd_folder, 'models')
+        QgsMessageLog.logMessage(f'OPTIMAL-IPB: cmd_folder={cmd_folder}', 'OPTIMAL-IPB')
+        try:
+            for file in os.listdir(models_dir):
+                if file.endswith(".onnx"):
+                    modelsList.append(file)
+        except Exception as e:
+            QgsMessageLog.logMessage(f'OPTIMAL-IPB: models dir error: {e}', 'OPTIMAL-IPB')
+        QgsMessageLog.logMessage(f'OPTIMAL-IPB: models found={modelsList}', 'OPTIMAL-IPB')
 
         # We add the input vector features source. It can have any kind of
         # geometry.
@@ -289,14 +294,15 @@ class OptimalIpbAlgorithm(QgsProcessingAlgorithm):
 
             detect_palm(model, ds, x, y, winW, winH, minmaxlist, mAP_val)
 
-        bboxeses = np.array(bboxes, dtype=np.float32)
-        flatten_score = np.concatenate(scoreses)
-
-        # non max suppression on overlay bboxes
-        # new_boxes = non_max_suppression_fast(bboxeses, overlapThresh=iouthreshold)
-        keep = nms(bboxeses, flatten_score, iou_threshold=0.3)
-        new_boxes = bboxeses[keep]
-        new_scores = flatten_score[keep]
+        if bboxes:
+            bboxeses = np.array(bboxes, dtype=np.float32).reshape(-1, 4)
+            flatten_score = np.concatenate(scoreses)
+            keep = nms(bboxeses, flatten_score, iou_threshold=0.3)
+            new_boxes = bboxeses[keep]
+            new_scores = flatten_score[keep]
+        else:
+            new_boxes = np.zeros((0, 4), dtype=np.float32)
+            new_scores = np.array([], dtype=np.float32)
 
         # prepare writer
         outFeat = QgsFeature()
@@ -394,8 +400,7 @@ class OptimalIpbAlgorithm(QgsProcessingAlgorithm):
         return QCoreApplication.translate('Processing', string)
 
     def icon(self):
-        cmd_folder = os.path.split(inspect.getfile(inspect.currentframe()))[0]
-        icon = QIcon(os.path.join(os.path.join(cmd_folder, 'logo.png')))
+        icon = QIcon(os.path.join(cmd_folder, 'logo.png'))
         return icon
 
     def createInstance(self):
