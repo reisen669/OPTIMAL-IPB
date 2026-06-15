@@ -1,5 +1,5 @@
-Layer: canvas_1mpx
-File:  canvas_1mpx.tif
+Layer: imagery_1.0mpx
+File:  imagery_1.0mpx.tif
 CRS:   EPSG:3857 (WGS 84 / Pseudo-Mercator)
 
 --- Lat/Lon Extents (WGS84 / EPSG:4326) ---
