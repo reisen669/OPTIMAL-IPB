@@ -49,7 +49,8 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingParameterEnum,
                        QgsProcessingParameterNumber,
                        QgsProcessingParameterFeatureSink,
-                       QgsMessageLog)
+                       QgsMessageLog,
+                       QgsWkbTypes)
 
 import numpy as np
 import os
@@ -138,11 +139,11 @@ def detect_palm(model, ds, x, y, winW, winH, minmaxlist, scorethreshold):
 
 def geom_type(argument):
     switcher = {
-        0: 1,
-        1: 3,
-        2: 3,
+        0: QgsWkbTypes.Point,
+        1: QgsWkbTypes.Polygon,
+        2: QgsWkbTypes.Polygon,
     }
-    return switcher.get(argument, 3)
+    return switcher.get(argument, QgsWkbTypes.Point)
 
 class OptimalIpbAlgorithm(QgsProcessingAlgorithm):
     """
