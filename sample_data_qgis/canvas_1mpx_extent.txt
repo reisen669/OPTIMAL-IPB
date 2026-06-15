@@ -1,0 +1,25 @@
+Layer: canvas_1mpx
+File:  canvas_1mpx.tif
+CRS:   EPSG:3857 (WGS 84 / Pseudo-Mercator)
+
+--- Lat/Lon Extents (WGS84 / EPSG:4326) ---
+
+Bounding box:
+  North (max lat):  3.38684891
+  South (min lat):  3.38256094
+  West  (min lon):  102.98364179
+  East  (max lon):  102.98940782
+
+Corners:
+  Upper-Left  (UL):  lat  3.38684891,  lon 102.98364179
+  Upper-Right (UR):  lat  3.38684891,  lon 102.98940782
+  Lower-Right (LR):  lat  3.38256094,  lon 102.98940782
+  Lower-Left  (LL):  lat  3.38256094,  lon 102.98364179
+
+--- Raster Properties ---
+
+Dimensions:       642 x 478 pixels
+Pixel resolution: 0.9998 m (X) x 1.0004 m (Y)  (~1.0 m GSD)
+Coverage:         641.87 m (W) x 478.17 m (H)
+Total area:       306,923 m²  (30.6923 ha)
+Bands:            3 (RGB, Byte)

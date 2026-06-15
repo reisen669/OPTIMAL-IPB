@@ -1,0 +1,25 @@
+Layer: imagery_0.5mpx
+File:  imagery_0.5mpx.tif
+CRS:   EPSG:3857 (WGS 84 / Pseudo-Mercator)
+
+--- Lat/Lon Extents (WGS84 / EPSG:4326) ---
+
+Bounding box:
+  North (max lat):  3.38684891
+  South (min lat):  3.38256246
+  West  (min lon):  102.98364179
+  East  (max lon):  102.98940897
+
+Corners:
+  Upper-Left  (UL):  lat  3.38684891,  lon 102.98364179
+  Upper-Right (UR):  lat  3.38684891,  lon 102.98940897
+  Lower-Right (LR):  lat  3.38256246,  lon 102.98940897
+  Lower-Left  (LL):  lat  3.38256246,  lon 102.98364179
+
+--- Raster Properties ---
+
+Dimensions:       1284 x 956 pixels
+Pixel resolution: 0.5000 m (X) x 0.5000 m (Y)  (~0.5 m GSD)
+Coverage:         642.00 m (W) x 478.00 m (H)
+Total area:       306,876 m²  (30.6876 ha)
+Bands:            3 (RGB, Byte)
