@@ -82,7 +82,7 @@
 | Plugin | Slot | Install | QGIS load | Output | Score field | Decision |
 |--------|------|---------|-----------|--------|-------------|----------|
 | OPTIMAL-IPB | A | — | — | — | `score` | pending test |
-| Deepness | B | — | — | — | `score` | pending install |
+| Deepness | B | — | — | — | `NONE (geometry only)` | pending — see 02-03-PLAN.md |
 | DeepForest | B fallback | — | — | — | `score` | conditional |
 
 Plugin A: TBD after testing
