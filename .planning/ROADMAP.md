@@ -46,11 +46,12 @@ Plans:
 - ENS-04: Ensemble output has fields: confidence (1.0/0.5), source (both/layer_name), score_a, score_b
 - ENS-05: No crash on empty input from either layer; CRS mismatch raises clear error
 
-**Plans:** 2 plans (wave-gated)
+**Plans:** 3 plans (wave-gated)
 
 Plans:
 - [ ] 02-01-PLAN.md — Research + sequential install/test of palm detection candidates (ENS-01, ENS-02) — Wave 1
 - [ ] 02-02-PLAN.md — PalmEnsembleAlgorithm implementation (ENS-03, ENS-04, ENS-05) — Wave 2 (gate: 02-01-SUMMARY.md must exist)
+- [ ] 02-03-PLAN.md — Deepness Plugin B: dependency fix, Tree-Tops ONNX download, QGIS run, centroid extraction (ENS-01, ENS-02) — Wave 1 (parallel with 02-01)
 
 **Success Criteria:**
 1. Two confirmed plugins (Plugin A and Plugin B) each produce detections on the same test raster
