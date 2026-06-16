@@ -52,7 +52,7 @@ Plans:
 - [ ] 02-01-PLAN.md — Research + sequential install/test of palm detection candidates (ENS-01, ENS-02) — Wave 1
 - [ ] 02-02-PLAN.md — PalmEnsembleAlgorithm implementation (ENS-03, ENS-04, ENS-05) — Wave 2 (gate: 02-01-SUMMARY.md must exist)
 - [ ] 02-03-PLAN.md — Deepness Plugin B: dependency fix, Tree-Tops ONNX download, QGIS run, centroid extraction (ENS-01, ENS-02) — Wave 1 (parallel with 02-01)
-- [ ] 02-04-PLAN.md — Find model checkpoints (10 cm/px–1.0 m/px) and GeoTIFF palm samples; write source report (ENS-01, ENS-02) — Wave 4
+- [x] 02-04-PLAN.md — Find model checkpoints (10 cm/px–1.0 m/px) and GeoTIFF palm samples; write source report (ENS-01, ENS-02) — Wave 4 — COMPLETE (2026-06-16, 0 new ONNX / 3 OAM TIFs; commits 7ece01c + 78103b2)
 
 **Success Criteria:**
 1. Two confirmed plugins (Plugin A and Plugin B) each produce detections on the same test raster
