@@ -75,6 +75,6 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 03-01-PLAN.md — Write 03-CANDIDATE-REPORT.md: complete model catalog (10 candidates, 9 columns) + Recommended Shortlist for Phase 4 (CAND-01, CAND-02, CAND-03)
+- [x] 03-01-PLAN.md — Write 03-CANDIDATE-REPORT.md: complete model catalog (10 candidates, 9 columns) + Recommended Shortlist for Phase 4 (CAND-01, CAND-02, CAND-03)
 
 ---

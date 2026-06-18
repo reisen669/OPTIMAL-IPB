@@ -1,15 +1,34 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: unknown
+last_updated: "2026-06-18T08:23:47.096Z"
+progress:
+  total_phases: 3
+  completed_phases: 1
+  total_plans: 10
+  completed_plans: 6
+  percent: 60
+---
+
 # Project State — optimal-ipb
 
 ## Status
+
 Phase 1 COMPLETE — All 3 plans done. Plugin fully migrated to onnxruntime on Python 3.12.
+Phase 3 PLANNED — 03-01-PLAN.md ready to execute. Produce 03-CANDIDATE-REPORT.md.
 
 ## Current Phase
-Phase 2: Palm Detection Ensemble — IN PROGRESS
+
+Phase 3: Research palm counting/detection models — READY TO EXECUTE
 
 ## Current Plan
-02-04-PLAN.md — COMPLETE. Model sources A–E probed (0 new ONNX); 3 SE Asia GeoTIFFs downloaded to tif_online_samples/ from OpenAerialMap. 02-04-SOURCES.md written with all 11 source categories.
+
+03-01-PLAN.md — Write 03-CANDIDATE-REPORT.md (10-candidate catalog + Phase 4 shortlist)
 
 ## Completed Work (pre-planning session)
+
 - __init__.py: qgis_gdal_env conda env injected via sys.path + os.add_dll_directory
 - compute_overlap.cp312-win_amd64.pyd: compiled with MSVC 14.50 + Cython 3.2.5 (numpy 1.26.4)
 - Google-Resnet101.onnx (211 MB): converted from .h5 via tf_keras + tf2onnx 1.17.0, opset 13
@@ -17,6 +36,7 @@ Phase 2: Palm Detection Ensemble — IN PROGRESS
 - Git repo initialized
 
 ## Key Decisions
+
 | Decision | Rationale |
 |----------|-----------|
 | Use qgis_gdal_env for all deps | Avoids modifying QGIS's bundled Python |
@@ -30,6 +50,7 @@ Phase 2: Palm Detection Ensemble — IN PROGRESS
 | parameterAsEnum for TYPE | Returns int (0/1/2) matching geometry comparisons; parameterAsDouble returned float |
 
 ## Key Decisions
+
 | Decision | Rationale |
 |----------|-----------|
 | Use qgis_gdal_env for all deps | Avoids modifying QGIS's bundled Python |
@@ -45,6 +66,7 @@ Phase 2: Palm Detection Ensemble — IN PROGRESS
 | Path A for resolution mismatch | Use fine-GSD OAM TIF (Perak 5 cm/px) with existing tree_tops_yolov9.onnx instead of seeking new model |
 
 ## Completed Plans
+
 | Plan | Name | Commit | Date |
 |------|------|--------|------|
 | 01-01 | Install onnxruntime into qgis_gdal_env | 9ca9d53 | 2026-06-12 |
@@ -53,6 +75,7 @@ Phase 2: Palm Detection Ensemble — IN PROGRESS
 | 02-04 | Model and GeoTIFF acquisition (Wave 4) | 7ece01c, 78103b2 | 2026-06-16 |
 
 ## Performance Metrics
+
 | Phase | Plan | Duration | Tasks | Files Changed |
 |-------|------|----------|-------|---------------|
 | 01 | 01 | ~5 min | 1/1 | 0 (env-only) |
@@ -63,7 +86,8 @@ Phase 2: Palm Detection Ensemble — IN PROGRESS
 ## Accumulated Context
 
 ### Roadmap Evolution
+
 - Phase 3 added: Research palm counting/detection models for aerial/satellite imagery — brainstorm candidate projects with pretrained checkpoints; document GSD per model
 
 ---
-*Last updated: 2026-06-18 — Phase 3 added to roadmap*
+*Last updated: 2026-06-18 — Phase 3 planned (03-01-PLAN.md)*
