@@ -77,4 +77,14 @@ Plans:
 Plans:
 - [x] 03-01-PLAN.md — Write 03-CANDIDATE-REPORT.md: complete model catalog (10 candidates, 9 columns) + Recommended Shortlist for Phase 4 (CAND-01, CAND-02, CAND-03)
 
+### Phase 4: Palm model download, ONNX conversion, and empirical testing on OAM rasters
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 3
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 4 to break down)
+
 ---

@@ -88,6 +88,7 @@ Phase 3: Research palm counting/detection models — READY TO EXECUTE
 ### Roadmap Evolution
 
 - Phase 3 added: Research palm counting/detection models for aerial/satellite imagery — brainstorm candidate projects with pretrained checkpoints; document GSD per model
+- Phase 4 added: Palm model download, ONNX conversion, and empirical testing on OAM rasters
 
 ---
-*Last updated: 2026-06-18 — Phase 3 planned (03-01-PLAN.md)*
+*Last updated: 2026-06-18 — Phase 4 added to roadmap*
