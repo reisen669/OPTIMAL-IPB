@@ -69,12 +69,12 @@ Plans:
 
 ### Phase 3: Research palm counting/detection models for aerial/satellite imagery — brainstorm candidate projects with pretrained checkpoints; document GSD per model
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** Catalog publicly available palm/tree-crown detection models with downloadable pretrained checkpoints, document their GSD range, and produce 03-CANDIDATE-REPORT.md with a recommended shortlist for Phase 4 model selection.
+**Requirements:** CAND-01 (main catalog table), CAND-02 (restricted/Baidu section), CAND-03 (Phase 4 shortlist)
 **Depends on:** Phase 2
-**Plans:** 0 plans
+**Plans:** 1 plan
 
 Plans:
-- [ ] TBD (run /gsd-plan-phase 3 to break down)
+- [ ] 03-01-PLAN.md — Write 03-CANDIDATE-REPORT.md: complete model catalog (10 candidates, 9 columns) + Recommended Shortlist for Phase 4 (CAND-01, CAND-02, CAND-03)
 
 ---
