@@ -136,17 +136,17 @@ The recommended file `230103_randresize_full.pth` is a Detectron2 Mask R-CNN che
 
 Phase 4 must choose one of two paths:
 - (a) Use detectree2's own Python API (`detectree2.models.predict.predict_on_image()`) as a standalone inference path outside Deepness. Output bounding boxes or instance masks; extract centroids; load the resulting point layer into QGIS as a vector layer.
-- (b) Attempt `torch.onnx.export` from Detectron2's inference graph. Known issue: Detectron2 ONNX export has dynamic shape challenges; use `torch.jit.trace` + `torch.onnx.export` approach documented in Detectron2 deploy docs.
+- (b) Attempt ONNX export from Detectron2's inference graph using `torch.jit.trace` + the standard PyTorch ONNX export utility. Known issue: Detectron2 ONNX export has dynamic shape challenges; see Detectron2 deploy docs for the recommended approach.
 
 **2. DeepForest (N2) — Requires DeepForest Python library**
 
-The weecology/deepforest-tree model weights are stored on HuggingFace but the full inference pipeline is embedded in the DeepForest library (`pip install deepforest`). The model cannot be run standalone without DeepForest. `model.export(format='onnx')` does not exist in DeepForest's API.
+The weecology/deepforest-tree model weights are stored on HuggingFace but the full inference pipeline is embedded in the DeepForest library (`pip install deepforest`). The model cannot be run standalone without DeepForest. DeepForest does not expose a standard ONNX export method — there is no equivalent of a generic model-export call in the DeepForest API.
 
 Phase 4 should treat DeepForest as a standalone inference path outside Deepness: use `model.predict_image(path="raster.tif")` to generate a bounding box DataFrame, then convert to a QGIS vector layer. Install DeepForest into `qgis_gdal_env` first.
 
 **3. grediiiii H2 — Custom GhostNet+CBAM backbone**
 
-The YOLOv8n model uses a non-standard GhostNet+CBAM backbone not present in the ultralytics codebase. Running `ultralytics model.export(format='onnx')` may raise `NotImplementedError` or an ONNX opset compatibility error for unsupported operators.
+The YOLOv8n model uses a non-standard GhostNet+CBAM backbone not present in the ultralytics codebase. Attempting ONNX export via ultralytics may raise `NotImplementedError` or an ONNX opset compatibility error for unsupported operators.
 
 Phase 4 action: Download `best.pt` and attempt ONNX export immediately. If export fails within the first 30 minutes of Phase 4, skip this candidate entirely. Do not invest further time in custom backbone workarounds.
 
@@ -158,4 +158,72 @@ This candidate is very low priority for Phase 4. Deprioritize unless all other V
 
 ---
 
-<!-- Recommended Shortlist written in Task 2 -->
+## Recommended Shortlist for Phase 4
+
+Top candidates for Phase 4 download, conversion, and empirical testing, organized by GSD tier.
+
+---
+
+### Tier 1: VHR — ≤15 cm/px (Perak 5 cm + Rupat 8.8 cm rasters)
+
+**Entry 1 — tree_tops_yolov9.onnx (B1) — BASELINE, already present**
+- Why: Already in models/, Deepness-ready, verified to detect tree crowns at 5–10 cm/px. No download or conversion needed. Use as the benchmark against which new candidates are measured.
+- Suits: Perak (5 cm/px) ✓, Rupat (8.8 cm/px) ✓
+- Action in Phase 4: Run on Perak and Rupat rasters via Deepness; record detection count and confidence distribution as the baseline for comparison.
+
+**Entry 2 — tribber93/yolov11-palm-oil-tree (H1) — HIGH PRIORITY**
+- Why: Oil-palm-specific (not generic tree crown), YOLOv11 family — exports to ONNX via ultralytics; directly Deepness-compatible after export. Best domain match in the VHR tier among freely downloadable candidates.
+- Suits: Perak (?), Rupat (?) — GSD unknown; check README in Phase 4; assumed UAV aerial
+- Action in Phase 4: Download weights/best.pt from HuggingFace (`https://huggingface.co/tribber93/yolov11-palm-oil-tree`); export to ONNX via `ultralytics`; patch Deepness metadata; test on Perak raster.
+- Risk: GSD confidence LOW — model may not generalize to our imagery if trained at a different GSD. Validate GSD from README/model card before scheduling full testing.
+
+**Entry 3 — detectree2 / 230103_randresize_full.pth (N1) — HIGH PRIORITY**
+- Why: Trained on Sabah, Malaysia (SE Asia tropical forest) — strongest geographic domain match of any new candidate. CC BY 4.0 license. Correct GSD tier (5–20 cm/px). Open download, no login required.
+- Suits: Perak (5 cm/px) ✓, Rupat (8.8 cm/px) ✓
+- Download: `https://zenodo.org/records/12773341/files/230103_randresize_full.pth` (no authentication required; 498 MB)
+- Action in Phase 4: Download 230103_randresize_full.pth; run inference via detectree2 Python API (NOT via Deepness — Detectron2 format). Export centroid layer from bounding boxes; compare detection count with B1 baseline.
+- Caveat: Detects generic tropical tree crowns, not oil-palm class specifically. Will detect all crowns including non-palm vegetation. Deepness integration requires additional work — see Key Integration Constraints section.
+
+**Entry 4 (optional) — grediiiii/Yolov8n-GhostNet-CBAM-Oil-Palm (H2) — MEDIUM PRIORITY**
+- Why: MIT license, oil-palm-specific, very small model (3.45 MB). Worth attempting if ONNX export succeeds.
+- Suits: Unknown GSD — confirm from README before committing Phase 4 time.
+- Action in Phase 4: Download best.pt from HuggingFace (`https://huggingface.co/grediiiii/Yolov8n-GhostNet-CBAM-Oil-Palm`); attempt `ultralytics` ONNX export immediately. If export fails due to custom GhostNet+CBAM backbone, skip this candidate.
+- Risk: High ONNX export failure probability due to non-standard custom backbone. Do not invest more than 30 minutes before skipping.
+
+---
+
+### Tier 2: HR — 15–100 cm/px (no matching test raster)
+
+No confirmed publicly downloadable model exists in this GSD tier. The gap between VHR drone-trained models and MR satellite-trained models is real and documented in the literature. Phase 4 may revisit if MOPAD (N3) becomes accessible via Baidu Wangpan — attempt download first and confirm GSD from the ISPRS 2021 paper before scheduling tests. Do not block Phase 4 schedule waiting for Baidu access.
+
+---
+
+### Tier 3: MR — 0.5–2 m (Aceh 50 cm raster)
+
+**Entry 1 — Google-Resnet101.onnx / Geoeye-Resnet101.onnx / Pleiades-Resnet101.onnx (B2/B3/B4) — BASELINES, already present**
+- Why: Already in models/, Deepness-ready (RetinaNet ONNX). Only publicly available candidates at the MR tier. Cover the Aceh (50 cm/px) raster.
+- Suits: Aceh (50 cm/px) ✓
+- Action in Phase 4: Run on Aceh raster via OPTIMAL-IPB plugin; validate detection on new geographic region (Aceh Barat, Indonesia). Compare results across all three satellite-origin models to assess consistency.
+
+---
+
+### Deprioritized / Conditional
+
+- **weecology/deepforest-tree (N2):** Correct GSD tier (10 cm/px training), MIT license, but US NEON temperate/boreal forest training only — significant domain gap from SE Asia oil palm plantations. Attempt if VHR tier candidates (H1, N1) underperform on Perak/Rupat. Requires `pip install deepforest` into `qgis_gdal_env`.
+- **firdhokk/palm-tree-detection-with-rtdetr (H3):** 3.59 GB safetensors, RT-DETR HuggingFace Transformers pipeline — skip in Phase 4 unless all other VHR candidates fail. Do not invest Phase 4 time here.
+- **MOPAD (N3) / MADAN (N4):** Strong domain fit (SE Asia oil palm) but Baidu Wangpan accessibility is uncertain from non-China IP. Phase 4 should attempt download as a stretch goal; do not block the Phase 4 schedule on Baidu access resolution.
+
+---
+
+## Assumptions to Validate in Phase 4
+
+Before committing Phase 4 testing time to each candidate, validate these assumptions:
+
+- A1: tribber93/yolov11 training GSD assumed ~5–15 cm/px (typical UAV at 100–150 m AGL). Validate by reading the HuggingFace model card README in Phase 4.
+- A2: grediiiii/Yolov8n training is aerial (not ground-level photography). Validate by reading model card — if ground-level, it cannot detect trees in raster tiles.
+- A3: MOPAD (rs-dl) dataset was collected in SE Asia oil palm plantations. Validate from the ISPRS Journal 2021 paper (UAV oil palm detection — geographic region not explicit in README).
+- A4: MOPAD training GSD ~5–15 cm/px (large-area fixed-wing UAV survey). Validate from paper UAV flight altitude — if fixed-wing at 500 m AGL, GSD may be 20–30 cm/px.
+- A5: Baidu Wangpan MOPAD/MADAN links accessible from non-China IP addresses. Validate by download attempt in Phase 4; if blocked, deprioritize immediately.
+- A6: MADAN model weights are available (format and hosting not confirmed from GitHub README alone). Validate by reading MADAN README fully and attempting the Google Drive link.
+- A7: Google/Geoeye/Pleiades-Resnet101.onnx training GSD ~50 cm/px. Validate from original OPTIMAL-IPB model provenance documentation — STATE.md records ~50 cm/px; confirm before extending to new regions.
+- A8: detectree2 performance is acceptable at 8.8 cm/px (Rupat), despite Zenodo docs noting performance decreases above 100 mm GSD. Validate empirically by running on Rupat raster alongside Perak raster and comparing detection density.
