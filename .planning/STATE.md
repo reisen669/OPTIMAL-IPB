@@ -60,5 +60,10 @@ Phase 2: Palm Detection Ensemble — IN PROGRESS
 | 01 | 03 | ~3 min | 1/1 | 1 (deletion) |
 | 02 | 04 | ~45 min | 3/3 | 4 (3 TIF + SOURCES.md) |
 
+## Accumulated Context
+
+### Roadmap Evolution
+- Phase 3 added: Research palm counting/detection models for aerial/satellite imagery — brainstorm candidate projects with pretrained checkpoints; document GSD per model
+
 ---
-*Last updated: 2026-06-16 — Phase 2 plan 02-04 complete*
+*Last updated: 2026-06-18 — Phase 3 added to roadmap*

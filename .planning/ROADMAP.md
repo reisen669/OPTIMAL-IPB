@@ -67,4 +67,14 @@ Plans:
 **Spec:** docs/superpowers/specs/2026-06-12-palm-ensemble-design.md
 **Detail plans:** docs/superpowers/plans/2026-06-12-palm-ensemble-wave1-plugin-research.md, docs/superpowers/plans/2026-06-12-palm-ensemble-wave2-algorithm.md
 
+### Phase 3: Research palm counting/detection models for aerial/satellite imagery — brainstorm candidate projects with pretrained checkpoints; document GSD per model
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 2
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 3 to break down)
+
 ---
