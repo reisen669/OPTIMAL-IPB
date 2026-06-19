@@ -106,10 +106,10 @@ Plans:
 **Plans:** 5 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Wave 1: VHR candidates — SelvaBox/CanopyRS (E1), VHRTrees (E2), PRISM/Zippppo (E3), TorchGeo, OpenMMLab (EXT-01)
-- [ ] 05-02-PLAN.md — Wave 1: ModelScope, MDPI/ISPRS 2024–2025, CVPR/ICCV 2024 (EXT-01)
-- [ ] 05-03-PLAN.md — Wave 1: Roboflow R1/R2 re-probe + R4–R8 new models (EXT-03)
-- [ ] 05-04-PLAN.md — Wave 1: arXiv/IEEE re-probe + palm counting/density tier (EXT-02, EXT-03)
-- [ ] 05-05-PLAN.md — Wave 2: Write 05-EXTENDED-REPORT.md — aggregate all findings, apply Phase 6 shortlist criteria (EXT-01, EXT-02, EXT-03, EXT-04)
+- [x] 05-01-PLAN.md — Wave 1: VHR candidates — SelvaBox/CanopyRS (E1), VHRTrees (E2), PRISM/Zippppo (E3), TorchGeo, OpenMMLab (EXT-01) — COMPLETE (2026-06-19)
+- [x] 05-02-PLAN.md — Wave 1: ModelScope, MDPI/ISPRS 2024–2025, CVPR/ICCV 2024 (EXT-01) — COMPLETE (2026-06-19)
+- [x] 05-03-PLAN.md — Wave 1: Roboflow R1/R2 re-probe + R4–R8 new models (EXT-03) — COMPLETE (2026-06-19)
+- [x] 05-04-PLAN.md — Wave 1: arXiv/IEEE re-probe + palm counting/density tier (EXT-02, EXT-03) — COMPLETE (2026-06-19)
+- [x] 05-05-PLAN.md — Wave 2: Write 05-EXTENDED-REPORT.md — aggregate all findings, apply Phase 6 shortlist criteria (EXT-01, EXT-02, EXT-03, EXT-04) — COMPLETE (2026-06-19)
 
 ---
