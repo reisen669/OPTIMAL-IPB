@@ -93,3 +93,23 @@ Plans:
 - [ ] 04-06-PLAN.md — Wave 5: Results finalization, D-11 evaluation, ROADMAP.md update, final commit (MOD-01, MOD-03, MOD-04, MOD-05)
 
 ---
+
+### Phase 5: Extended palm / tree-crown detection model research — beyond Phase 3 catalog
+
+**Goal:** Find palm and tree-crown detection models with publicly downloadable pretrained checkpoints NOT catalogued in Phase 3, with emphasis on satellite-native GSD models, palm counting / density-estimation approaches, recent 2024–2025 publications, and sources Phase 3 marked PARTIAL or BLOCKED. Document GSD (cm/px) range for each candidate, download status, and inference path. Produce 05-EXTENDED-REPORT.md as a structured addendum to 03-CANDIDATE-REPORT.md.
+**Requirements:**
+- EXT-01: All new candidates documented with architecture, GSD range (cm/px), format, license, download URL, and SE Asia applicability
+- EXT-02: Palm counting / density-estimation models covered as a separate tier (distinct from detection/bounding-box models)
+- EXT-03: Sources from Phase 3 marked PARTIAL/BLOCKED re-probed (IEEE Xplore, Baidu Wangpan, ArcGIS Living Atlas)
+- EXT-04: 05-EXTENDED-REPORT.md produced with summary table and Phase 6 shortlist addendum
+**Depends on:** Phase 3
+**Plans:** 5 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Wave 1: VHR candidates — SelvaBox/CanopyRS (E1), VHRTrees (E2), PRISM/Zippppo (E3), TorchGeo, OpenMMLab (EXT-01)
+- [ ] 05-02-PLAN.md — Wave 1: ModelScope, MDPI/ISPRS 2024–2025, CVPR/ICCV 2024 (EXT-01)
+- [ ] 05-03-PLAN.md — Wave 1: Roboflow R1/R2 re-probe + R4–R8 new models (EXT-03)
+- [ ] 05-04-PLAN.md — Wave 1: arXiv/IEEE re-probe + palm counting/density tier (EXT-02, EXT-03)
+- [ ] 05-05-PLAN.md — Wave 2: Write 05-EXTENDED-REPORT.md — aggregate all findings, apply Phase 6 shortlist criteria (EXT-01, EXT-02, EXT-03, EXT-04)
+
+---
