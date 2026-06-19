@@ -79,12 +79,17 @@ Plans:
 
 ### Phase 4: Palm model download, ONNX conversion, and empirical testing on OAM rasters
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** Commit and verify all existing palm detection models (ONNX + Roboflow API); run empirical tests on OAM rasters (Perak 5cm, Rupat 8.8cm, Aceh 50cm); document quantitative and visual results in 04-TEST-RESULTS.md. Phase succeeds when at least one VHR model produces plausible palm detections on Perak or Rupat (D-11).
+**Requirements:** MOD-01, MOD-02, MOD-03, MOD-04, MOD-05
 **Depends on:** Phase 3
-**Plans:** 0 plans
+**Plans:** 6 plans
 
 Plans:
-- [ ] TBD (run /gsd-plan-phase 4 to break down)
+- [ ] 04-01-PLAN.md — Wave 0: .gitignore, verify_onnx_models.py patch, mopad error-message fix, commit all code files (MOD-01, MOD-02)
+- [ ] 04-02-PLAN.md — Wave 1: Run verify_onnx_models.py, record tensor names and pass/fail for all 6 ONNX models (MOD-02)
+- [ ] 04-03-PLAN.md — Wave 2: VHR model tests — B1 tree_tops, H1 tribber93, MOPAD on Rupat and Perak (MOD-03)
+- [ ] 04-04-PLAN.md — Wave 3: MR model tests — B2 Google, B3 Geoeye, B4 Pleiades on Aceh 50cm (MOD-04)
+- [ ] 04-05-PLAN.md — Wave 4: Roboflow API tests on Rupat and Perak; confirm roboflow_api_key (MOD-05)
+- [ ] 04-06-PLAN.md — Wave 5: Results finalization, D-11 evaluation, ROADMAP.md update, final commit (MOD-01, MOD-03, MOD-04, MOD-05)
 
 ---
