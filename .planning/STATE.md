@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: ready_to_execute
-last_updated: "2026-06-24T01:26:32.007Z"
+status: in_progress
+last_updated: "2026-06-24T10:00:00.000Z"
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 25
-  completed_plans: 12
-  percent: 48
+  completed_plans: 13
+  percent: 52
 ---
 
 # Project State — optimal-ipb
@@ -18,15 +18,16 @@ progress:
 
 Phase 1 COMPLETE — All 3 plans done. Plugin fully migrated to onnxruntime on Python 3.12.
 Phase 3 COMPLETE — 03-01-PLAN.md executed. 03-CANDIDATE-REPORT.md produced (10 candidates, Phase 4 shortlist).
-Phase 4 PLANNED — 6 plans ready to execute. Commit + verify + test ONNX models; document results.
+Phase 5 COMPLETE — All 5 plans done. 05-EXTENDED-REPORT.md produced (E1 CanopyRS, E2 VHRTrees shortlist).
+Phase 6 IN PROGRESS — 4 plans. Acquire, convert, and test E1 CanopyRS and E2 VHRTrees ONNX models.
 
 ## Current Phase
 
-Phase 4: Palm model verification and empirical testing — READY TO EXECUTE
+Phase 6: Phase 5 shortlist model acquisition, ONNX conversion, and empirical testing — IN PROGRESS
 
 ## Current Plan
 
-04-01-PLAN.md — Wave 0: .gitignore, verify_onnx_models.py patch, commit all code files (MOD-01, MOD-02)
+06-02-PLAN.md — Wave 1: E1 CanopyRS — URL verification, weight download, Python 3.12 compat test
 
 ## Completed Work (pre-planning session)
 
@@ -65,6 +66,8 @@ Phase 4: Palm model verification and empirical testing — READY TO EXECUTE
 | parameterAsEnum for TYPE | Returns int (0/1/2) matching geometry comparisons; parameterAsDouble returned float |
 | No palm-specific ONNX publicly downloadable | All probed sources (Deepness, HuggingFace, Roboflow, GitHub, Zenodo) provide .pt weights only or 403 responses; export via ultralytics is the path forward |
 | Path A for resolution mismatch | Use fine-GSD OAM TIF (Perak 5 cm/px) with existing tree_tops_yolov9.onnx instead of seeking new model |
+| Base YOLOv8m COCO as VHRTrees substitute (06-01) | Google Drive file 1DO785NH13fEleCrQeLQb9L7SSyb1tEiT requires Google auth; automated download returns 401; base model validates inference pipeline |
+| onnxruntime 1.20.0 over 1.17.0 (06-01) | numpy 2.5.0 in conda env incompatible with onnxruntime 1.17.0 pybind11; upgraded to 1.20.0 |
 
 ## Completed Plans
 
@@ -74,6 +77,7 @@ Phase 4: Palm model verification and empirical testing — READY TO EXECUTE
 | 01-02 | Replace tf_keras inference with onnxruntime | f8ace04 | 2026-06-12 |
 | 01-03 | Delete cp37 .pyd artifact (PLUG-06) | filesystem-only | 2026-06-12 |
 | 02-04 | Model and GeoTIFF acquisition (Wave 4) | 7ece01c, 78103b2 | 2026-06-16 |
+| 06-01 | E2 VHRTrees YOLOv8m ONNX export and inference test | 2447cbf, 9f3482a, c22ea00 | 2026-06-24 |
 
 ## Performance Metrics
 
@@ -83,6 +87,7 @@ Phase 4: Palm model verification and empirical testing — READY TO EXECUTE
 | 01 | 02 | ~10 min | 2/2 | 1 |
 | 01 | 03 | ~3 min | 1/1 | 1 (deletion) |
 | 02 | 04 | ~45 min | 3/3 | 4 (3 TIF + SOURCES.md) |
+| 06 | 01 | ~45 min | 3/3 | 5 (onnx + pt + 3 scripts) |
 
 ## Accumulated Context
 
@@ -92,4 +97,4 @@ Phase 4: Palm model verification and empirical testing — READY TO EXECUTE
 - Phase 4 added: Palm model download, ONNX conversion, and empirical testing on OAM rasters
 
 ---
-*Last updated: 2026-06-18 — Phase 4 added to roadmap*
+*Last updated: 2026-06-24 — 06-01 complete: VHRTrees ONNX export + inference test*
