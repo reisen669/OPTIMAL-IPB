@@ -8,8 +8,8 @@ progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 25
-  completed_plans: 13
-  percent: 52
+  completed_plans: 14
+  percent: 56
 ---
 
 # Project State — optimal-ipb
@@ -27,7 +27,7 @@ Phase 6: Phase 5 shortlist model acquisition, ONNX conversion, and empirical tes
 
 ## Current Plan
 
-06-02-PLAN.md — Wave 1: E1 CanopyRS — URL verification, weight download, Python 3.12 compat test
+06-03-PLAN.md — Wave 2: E1 CanopyRS empirical test (SKIPPED — E1 BLOCKED; proceed to E2 VHRTrees empirical test)
 
 ## Completed Work (pre-planning session)
 
@@ -68,6 +68,7 @@ Phase 6: Phase 5 shortlist model acquisition, ONNX conversion, and empirical tes
 | Path A for resolution mismatch | Use fine-GSD OAM TIF (Perak 5 cm/px) with existing tree_tops_yolov9.onnx instead of seeking new model |
 | Base YOLOv8m COCO as VHRTrees substitute (06-01) | Google Drive file 1DO785NH13fEleCrQeLQb9L7SSyb1tEiT requires Google auth; automated download returns 401; base model validates inference pipeline |
 | onnxruntime 1.20.0 over 1.17.0 (06-01) | numpy 2.5.0 in conda env incompatible with onnxruntime 1.17.0 pybind11; upgraded to 1.20.0 |
+| E1 CanopyRS skipped in Phase 6 (06-02) | GitHub Releases = source archives only (no weights); package requires SAM 3 (gated HF), Linux, Python 3.10, CUDA 12.6 — all incompatible |
 
 ## Completed Plans
 
@@ -78,6 +79,7 @@ Phase 6: Phase 5 shortlist model acquisition, ONNX conversion, and empirical tes
 | 01-03 | Delete cp37 .pyd artifact (PLUG-06) | filesystem-only | 2026-06-12 |
 | 02-04 | Model and GeoTIFF acquisition (Wave 4) | 7ece01c, 78103b2 | 2026-06-16 |
 | 06-01 | E2 VHRTrees YOLOv8m ONNX export and inference test | 2447cbf, 9f3482a, c22ea00 | 2026-06-24 |
+| 06-02 | E1 CanopyRS weight verification — BLOCKED | 429e139, 25371c0 | 2026-06-24 |
 
 ## Performance Metrics
 
@@ -88,6 +90,7 @@ Phase 6: Phase 5 shortlist model acquisition, ONNX conversion, and empirical tes
 | 01 | 03 | ~3 min | 1/1 | 1 (deletion) |
 | 02 | 04 | ~45 min | 3/3 | 4 (3 TIF + SOURCES.md) |
 | 06 | 01 | ~45 min | 3/3 | 5 (onnx + pt + 3 scripts) |
+| 06 | 02 | ~10 min | 2/2 | 1 (download_missing.py blocker comment) |
 
 ## Accumulated Context
 
@@ -97,4 +100,4 @@ Phase 6: Phase 5 shortlist model acquisition, ONNX conversion, and empirical tes
 - Phase 4 added: Palm model download, ONNX conversion, and empirical testing on OAM rasters
 
 ---
-*Last updated: 2026-06-24 — 06-01 complete: VHRTrees ONNX export + inference test*
+*Last updated: 2026-06-24 — 06-02 complete: E1 CanopyRS BLOCKED (no weights, Linux/Python 3.10/CUDA 12.6 incompatible)*

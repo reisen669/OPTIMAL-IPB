@@ -130,7 +130,7 @@ Plans:
 
 Plans:
 - [x] 06-01-PLAN.md — Wave 1: E2 VHRTrees — download YOLOv8m .pt, ONNX export, test on Canvas/Aceh (VHR-01, VHR-05) — COMPLETE (2026-06-24, base YOLOv8m COCO used; VHRTrees weights require Google auth; 0 canvas detections, 1 Aceh detection@0.415)
-- [ ] 06-02-PLAN.md — Wave 1: E1 CanopyRS — verify weight URL, install canopyrs, test Python 3.12 compatibility (VHR-02, VHR-03)
+- [x] 06-02-PLAN.md — Wave 1: E1 CanopyRS — verify weight URL, install canopyrs, test Python 3.12 compatibility (VHR-02, VHR-03) — BLOCKED (2026-06-24, no weights on GitHub Releases; SAM 3 / Linux / Python 3.10 / CUDA 12.6 required — all incompatible; E1 skipped)
 - [ ] 06-03-PLAN.md — Wave 2: E1 CanopyRS — ONNX export attempt, test on Perak/Rupat if successful (VHR-04, VHR-06)
 - [ ] 06-04-PLAN.md — Wave 3: Results finalization — write 06-TEST-RESULTS.md, domain gap assessment, ROADMAP update (VHR-07)
 
