@@ -27,7 +27,7 @@ Phase 6: Phase 5 shortlist model acquisition, ONNX conversion, and empirical tes
 
 ## Current Plan
 
-06-03-PLAN.md — Wave 2: E1 CanopyRS empirical test (SKIPPED — E1 BLOCKED; proceed to E2 VHRTrees empirical test)
+06-04-PLAN.md — Wave 3: Results finalization — write 06-TEST-RESULTS.md, domain gap assessment, ROADMAP update (VHR-07)
 
 ## Completed Work (pre-planning session)
 
@@ -80,6 +80,7 @@ Phase 6: Phase 5 shortlist model acquisition, ONNX conversion, and empirical tes
 | 02-04 | Model and GeoTIFF acquisition (Wave 4) | 7ece01c, 78103b2 | 2026-06-16 |
 | 06-01 | E2 VHRTrees YOLOv8m ONNX export and inference test | 2447cbf, 9f3482a, c22ea00 | 2026-06-24 |
 | 06-02 | E1 CanopyRS weight verification — BLOCKED | 429e139, 25371c0 | 2026-06-24 |
+| 06-03 | E1 CanopyRS ONNX export attempt — SKIPPED (gate pass-through) | ea5ff4d, 46fc70e | 2026-06-24 |
 
 ## Performance Metrics
 
@@ -91,6 +92,7 @@ Phase 6: Phase 5 shortlist model acquisition, ONNX conversion, and empirical tes
 | 02 | 04 | ~45 min | 3/3 | 4 (3 TIF + SOURCES.md) |
 | 06 | 01 | ~45 min | 3/3 | 5 (onnx + pt + 3 scripts) |
 | 06 | 02 | ~10 min | 2/2 | 1 (download_missing.py blocker comment) |
+| 06 | 03 | ~5 min | 2/2 | 3 (inspect_e1_checkpoint.py, export_e1_onnx.py, test_inference_e1.py) |
 
 ## Accumulated Context
 
@@ -100,4 +102,4 @@ Phase 6: Phase 5 shortlist model acquisition, ONNX conversion, and empirical tes
 - Phase 4 added: Palm model download, ONNX conversion, and empirical testing on OAM rasters
 
 ---
-*Last updated: 2026-06-24 — 06-02 complete: E1 CanopyRS BLOCKED (no weights, Linux/Python 3.10/CUDA 12.6 incompatible)*
+*Last updated: 2026-06-24 — 06-03 complete: E1 ONNX export and inference SKIPPED (gate pass-through from 06-02 BLOCKED verdict)*
