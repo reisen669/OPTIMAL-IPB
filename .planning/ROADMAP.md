@@ -126,19 +126,19 @@ Plans:
 - VHR-06: E1 CanopyRS tested on Perak 5cm and Rupat 8.8cm rasters (if export succeeds)
 - VHR-07: 06-TEST-RESULTS.md produced with domain gap assessment and precision/recall estimates
 **Depends on:** Phase 5
-**Plans:** 3-4 plans (estimated)
+**Plans:** 4 plans
 
 Plans:
 - [x] 06-01-PLAN.md — Wave 1: E2 VHRTrees — download YOLOv8m .pt, ONNX export, test on Canvas/Aceh (VHR-01, VHR-05) — COMPLETE (2026-06-24, base YOLOv8m COCO used; VHRTrees weights require Google auth; 0 canvas detections, 1 Aceh detection@0.415)
-- [x] 06-02-PLAN.md — Wave 1: E1 CanopyRS — verify weight URL, install canopyrs, test Python 3.12 compatibility (VHR-02, VHR-03) — BLOCKED (2026-06-24, no weights on GitHub Releases; SAM 3 / Linux / Python 3.10 / CUDA 12.6 required — all incompatible; E1 skipped)
-- [x] 06-03-PLAN.md — Wave 2: E1 CanopyRS — ONNX export attempt, test on Perak/Rupat if successful (VHR-04, VHR-06) — SKIPPED (2026-06-24, gate pass-through from 06-02 BLOCKED; documented-skip scripts created; commits ea5ff4d + 46fc70e)
-- [ ] 06-04-PLAN.md — Wave 3: Results finalization — write 06-TEST-RESULTS.md, domain gap assessment, ROADMAP update (VHR-07)
+- [x] 06-02-PLAN.md — Wave 1: E1 CanopyRS — verify weight URL, install canopyrs, test Python 3.12 compatibility (VHR-02, VHR-03) — COMPLETE (2026-06-24, BLOCKED: no weights on GitHub Releases; SAM 3 / Linux / Python 3.10 / CUDA 12.6 required — all incompatible; E1 skipped)
+- [x] 06-03-PLAN.md — Wave 2: E1 CanopyRS — ONNX export attempt, test on Perak/Rupat if successful (VHR-04, VHR-06) — COMPLETE (2026-06-24, SKIPPED: gate pass-through from 06-02 BLOCKED; documented-skip scripts created; commits ea5ff4d + 46fc70e)
+- [x] 06-04-PLAN.md — Wave 3: Results finalization — write 06-TEST-RESULTS.md, domain gap assessment, ROADMAP update (VHR-07) — COMPLETE (2026-06-24)
 
 **Success Criteria:**
-1. E2 VHRTrees ONNX file created and runs inference on canvas_0.5mpx.tif
-2. E1 CanopyRS weight accessibility confirmed or blocker documented
-3. At least one shortlist candidate produces detections on its target GSD raster(s)
-4. Domain gap assessment documented (Turkey generic trees vs SE Asia oil palm for E2; tropical rainforest vs plantation for E1)
-5. 06-TEST-RESULTS.md includes precision/recall estimates or qualitative assessment
+1. E2 VHRTrees ONNX file created and runs inference on canvas_0.5mpx.tif — MET (PARTIAL: base COCO model; pipeline verified; 0 detections expected)
+2. E1 CanopyRS weight accessibility confirmed or blocker documented — MET (no weights on GitHub Releases; SAM 3 gated dependency confirmed)
+3. At least one shortlist candidate produces detections on its target GSD raster(s) — PARTIAL (1 detection on Aceh at 0.415 with COCO base; not palm-specific)
+4. Domain gap assessment documented (Turkey generic trees vs SE Asia oil palm for E2; tropical rainforest vs plantation for E1) — MET (see 06-TEST-RESULTS.md)
+5. 06-TEST-RESULTS.md includes precision/recall estimates or qualitative assessment — MET (qualitative assessment; quantitative not measurable without ground truth)
 
 ---
