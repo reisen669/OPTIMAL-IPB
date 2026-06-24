@@ -113,3 +113,32 @@ Plans:
 - [x] 05-05-PLAN.md — Wave 2: Write 05-EXTENDED-REPORT.md — aggregate all findings, apply Phase 6 shortlist criteria (EXT-01, EXT-02, EXT-03, EXT-04) — COMPLETE (2026-06-19)
 
 ---
+
+### Phase 6: Phase 5 shortlist model acquisition, ONNX conversion, and empirical testing
+
+**Goal:** Download, convert to ONNX, and empirically test the two conditional candidates from Phase 5 shortlist (E1 CanopyRS, E2 VHRTrees) on appropriate GSD rasters. Verify weight accessibility, Python 3.12 compatibility, and ONNX export paths. Document quantitative results and domain gap assessment in 06-TEST-RESULTS.md.
+**Requirements:**
+- VHR-01: E2 VHRTrees YOLOv8m downloaded from Google Drive and converted to ONNX
+- VHR-02: E1 CanopyRS weight download URL verified (manual browser check)
+- VHR-03: E1 CanopyRS Faster R-CNN+R50 preset tested for Python 3.12 compatibility
+- VHR-04: E1 CanopyRS detection preset ONNX export attempted (if dependencies permit)
+- VHR-05: E2 VHRTrees tested on canvas_0.5mpx.tif and Aceh 50cm raster
+- VHR-06: E1 CanopyRS tested on Perak 5cm and Rupat 8.8cm rasters (if export succeeds)
+- VHR-07: 06-TEST-RESULTS.md produced with domain gap assessment and precision/recall estimates
+**Depends on:** Phase 5
+**Plans:** 3-4 plans (estimated)
+
+Plans:
+- [ ] 06-01-PLAN.md — Wave 1: E2 VHRTrees — download YOLOv8m .pt, ONNX export, test on Canvas/Aceh (VHR-01, VHR-05)
+- [ ] 06-02-PLAN.md — Wave 1: E1 CanopyRS — verify weight URL, install canopyrs, test Python 3.12 compatibility (VHR-02, VHR-03)
+- [ ] 06-03-PLAN.md — Wave 2: E1 CanopyRS — ONNX export attempt, test on Perak/Rupat if successful (VHR-04, VHR-06)
+- [ ] 06-04-PLAN.md — Wave 3: Results finalization — write 06-TEST-RESULTS.md, domain gap assessment, ROADMAP update (VHR-07)
+
+**Success Criteria:**
+1. E2 VHRTrees ONNX file created and runs inference on canvas_0.5mpx.tif
+2. E1 CanopyRS weight accessibility confirmed or blocker documented
+3. At least one shortlist candidate produces detections on its target GSD raster(s)
+4. Domain gap assessment documented (Turkey generic trees vs SE Asia oil palm for E2; tropical rainforest vs plantation for E1)
+5. 06-TEST-RESULTS.md includes precision/recall estimates or qualitative assessment
+
+---
