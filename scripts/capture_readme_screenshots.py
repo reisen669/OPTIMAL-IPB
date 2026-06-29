@@ -138,18 +138,26 @@ def _wait_for_render(timeout_ms=15000):
 def trigger_redraw_and_capture(out_path):
     """Trigger a redraw and save the canvas.
 
-    Does NOT change extent, zoom, or pan. The canvas is redrawn with the
-    current visibility settings and the result is saved as PNG.
+    Uses QWidget.grab() (PyQt5) on the map canvas. This is the same
+    mechanism QGIS's own "Save as Image" action uses when triggered from
+    the menu, and avoids the QPainter ownership issues that come with
+    creating a separate map-renderer job on the main thread.
     """
+    # Force a redraw so the canvas back-buffer reflects the new visibility
+    canvas.refreshAllLayers()
+    QApplication.processEvents()
+    # Block until the render finishes
+    _wait_for_render()
+    QApplication.processEvents()
+    # One more repaint to be safe
     canvas.repaint()
     QApplication.processEvents()
     _wait_for_render()
     QApplication.processEvents()
-    canvas.saveAsImage(out_path, None, "PNG")
-    # Final settle so save's repaint events finish
-    settle_loop = QEventLoop()
-    QTimer.singleShot(100, settle_loop.quit)
-    settle_loop.exec_()
+    # Use QWidget.grab() to capture the current rendered state.
+    # This is the same path used by QGIS's own save-as-image action.
+    pixmap = canvas.grab()
+    pixmap.save(out_path, "PNG")
 
 
 # -- Main loop ----------------------------------------------------------
