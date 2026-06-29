@@ -24,6 +24,7 @@ from qgis.core import (
     QgsMapLayerType,
 )
 from qgis.PyQt.QtCore import QEventLoop, QTimer
+from qgis.PyQt.QtWidgets import QApplication
 from qgis.utils import iface
 
 PLUGIN_ROOT = r"C:\Users\suily\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\optimal-ipb"
@@ -118,21 +119,25 @@ def trigger_redraw_and_capture(out_path):
     """Trigger a redraw on the main thread canvas and save the result.
 
     Steps:
-      1. canvas.refreshAllLayers()  -> schedules a new render.
-      2. _wait_for_render()          -> blocks on renderComplete signal.
-      3. canvas.saveAsImage(path)    -> saves the latest rendered canvas.
+      1. canvas.refreshAllLayers()   -> schedules a new render
+      2. QgsApplication.processEvents() -> pump events so render actually starts
+      3. _wait_for_render()           -> block on renderComplete signal
+      4. canvas.saveAsImage(path)     -> save the freshly-rendered canvas
+      5. Process events to settle     -> flush UI
     """
-    canvas.refreshAllLayers()
-    # Pump the event loop briefly so the render job is actually kicked off
-    # before we start waiting. Otherwise the first call may exit immediately.
-    wait_loop = QEventLoop()
-    QTimer.singleShot(50, wait_loop.quit)
-    wait_loop.exec_()
+    # Force a repaint which queues a render job synchronously on the main thread
+    canvas.repaint()
+    # Pump the event loop so the queued render job actually executes
+    QApplication.processEvents()
+    # Block until the render completes (signal-driven, with timeout)
     _wait_for_render()
+    # Pump one more time to ensure the canvas back-buffer is fully updated
+    QApplication.processEvents()
+    # Now save the result
     canvas.saveAsImage(out_path, None, "PNG")
-    # Small extra wait to let any pending UI events settle
+    # Final settle so any pending events (e.g., repaint from save) finish
     settle_loop = QEventLoop()
-    QTimer.singleShot(50, settle_loop.quit)
+    QTimer.singleShot(100, settle_loop.quit)
     settle_loop.exec_()
 
 
