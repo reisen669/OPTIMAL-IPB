@@ -61,3 +61,8 @@ htmlcov/
 *.qgz~
 .qgis2/
 .qgis3/
+
+# QGIS world files (auto-generated alongside rasters and image exports)
+*.pgw
+*.prj
+*.qpj
