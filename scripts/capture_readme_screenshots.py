@@ -33,14 +33,19 @@ os.makedirs(IMGS_DIR, exist_ok=True)
 # Three cases: (match_patterns, case_filename, case_label)
 # A pattern matches if it is contained as a substring in the layer's full
 # name (group path + name) OR equals the basename after the last "/".
+# Three cases: (key_tokens, case_filename, case_label)
+# A layer matches a case when its full name contains ALL of the given
+# tokens (case-insensitive substring). Tokens are matched individually so
+# that nested group paths like "palm_0.30mpx/GeoEye_0.30mpx/...mAP0.50_(pt)"
+# are caught regardless of capitalisation.
 CASES = [
-    (["0.30mpx_z19_GeoEye_mAP0.50_(pt)", "GeoEye_0.30mpx", "palm_0.30mpx/GeoEye_0.30mpx"],
+    (["geoeye", "0.50"],
      "case1_geoeye_30mpx_z19.png",
      "GeoEye-Resnet101 (mAP@0.5=0.50)"),
-    (["0.30mpx_z19_googleresnet_mAP0.30_(pt)", "GoogleResnet_0.30mpx", "palm_0.30mpx/GoogleResnet_0.30mpx"],
+    (["googleresnet", "0.30"],
      "case2_googleresnet_30mpx_z19.png",
      "Google-Resnet101 (mAP@0.5=0.30)"),
-    (["0.30mpx_z19_Pleiaedes_mAP0.20_(pt)", "Pleiaedes_0.30mpx", "palm_0.30mpx/Pleiaedes_0.30mpx"],
+    (["pleiaedes", "0.20"],
      "case3_pleiades_30mpx_z19.png",
      "Pleiades-Resnet101 (mAP@0.5=0.20)"),
 ]
@@ -52,24 +57,20 @@ canvas = iface.mapCanvas()
 
 # -- Layer matching -----------------------------------------------------
 
-def find_layer_by_patterns(patterns):
-    """Find first vector layer whose name (or group path) contains any pattern.
+def find_layer_by_patterns(tokens):
+    """Find first vector layer whose name (lowercased) contains ALL tokens.
 
-    Returns (layer, full_name) or (None, None).
+    Tokens are matched case-insensitively as substrings of the full layer
+    name (group path + name). Returns (layer, full_name) or (None, None).
     """
+    tokens_lower = [t.lower() for t in tokens]
     for lyr in project.mapLayers().values():
         if lyr.type() != QgsMapLayerType.VectorLayer:
             continue
         full_name = lyr.name()
-        # Check against the full layer name
-        for pat in patterns:
-            if pat in full_name:
-                return lyr, full_name
-        # Also check against the layer's short name (basename after last "/")
-        short_name = full_name.split("/")[-1]
-        for pat in patterns:
-            if pat in short_name:
-                return lyr, full_name
+        full_lower = full_name.lower()
+        if all(tok in full_lower for tok in tokens_lower):
+            return lyr, full_name
     return None, None
 
 
@@ -175,13 +176,14 @@ def main():
     saved_layer_ids = all_vector_layer_ids()
     results = []
 
-    for patterns, filename, label in CASES:
-        lyr, full_name = find_layer_by_patterns(patterns)
+    for tokens, filename, label in CASES:
+        lyr, full_name = find_layer_by_patterns(tokens)
         if lyr is None:
-            print(f"[SKIP] {label}: no layer matches any of {patterns}")
+            print(f"[SKIP] {label}: no layer matches ALL of {tokens}")
             continue
-        # Sanity-check: confirm the matched layer is the one we expect
-        if not any(p in full_name for p in patterns):
+        # Sanity-check: confirm the matched layer contains all tokens
+        full_lower = full_name.lower()
+        if not all(tok.lower() in full_lower for tok in tokens):
             print(f"[SKIP] {label}: layer matched but name {full_name!r} unexpected")
             continue
         # Toggle visibility: hide all others, show this one
