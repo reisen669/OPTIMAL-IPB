@@ -5,22 +5,25 @@ Run from: Plugins -> Python Console -> Editor tab -> open file -> Run
 Assumes QGIS is already zoomed to the target area and the base raster
 "merged_canvas0.5mpx_google_z19_clean" is loaded as the bottom layer.
 
-The script, for each case:
-  1. Hides ALL vector layers, shows only the named case layer.
-  2. Forces a synchronous redraw of the canvas (refreshAllLayers + waitForRendering).
-  3. Captures the canvas image to imgs/caseN_*.png.
-  4. Records feature count.
-  5. Restores all vector layer visibility at the end.
+Implementation note (do not use QgsMapRendererCustomPainterJob here):
+    QPainter resources in QGIS are owned by the main thread. Calling
+    `QgsMapRendererCustomPainterJob.waitForFinished()` from the QGIS
+    Python Console blocks the main thread and triggers a Windows access
+    violation (QPainter::setCompositionMode) if any other QGIS worker
+    thread (e.g., tile downloader, processing algorithm) is concurrently
+    trying to render or modify map state.
+
+    Correct approach: trigger the live canvas to redraw with the new layer
+    visibility, and block on the canvas.renderComplete signal (a
+    signal-and-slot idiom that is the supported way to wait for a
+    synchronous render from the main thread).
 """
 import os
 from qgis.core import (
     QgsProject,
     QgsMapLayerType,
-    QgsMapRendererCustomPainterJob,
-    QgsMapSettings,
 )
-from qgis.PyQt.QtCore import QSize, QEventLoop, QTimer
-from qgis.PyQt.QtGui import QImage, QPainter, QColor
+from qgis.PyQt.QtCore import QEventLoop, QTimer
 from qgis.utils import iface
 
 PLUGIN_ROOT = r"C:\Users\suily\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\optimal-ipb"
@@ -38,15 +41,15 @@ project = QgsProject.instance()
 root = project.layerTreeRoot()
 canvas = iface.mapCanvas()
 
+
 # -- Visibility helpers -------------------------------------------------
 
 def all_vector_layer_ids():
-    """Return list of IDs of all vector layers in the project (in tree order)."""
-    ids = []
-    for lyr in project.mapLayers().values():
-        if lyr.type() == QgsMapLayerType.VectorLayer:
-            ids.append(lyr.id())
-    return ids
+    """Return list of IDs of all vector layers in the project."""
+    return [
+        lyr.id() for lyr in project.mapLayers().values()
+        if lyr.type() == QgsMapLayerType.VectorLayer
+    ]
 
 
 def show_only_vector_layer(target_name):
@@ -77,49 +80,60 @@ def restore_all_visibility(layer_ids):
             node.setItemVisibilityChecked(True)
 
 
-# -- Canvas capture (synchronous) ---------------------------------------
+# -- Render barrier -----------------------------------------------------
 
-def _wait_for_render(timeout_ms=10000):
-    """Block until the canvas finishes rendering, up to timeout_ms."""
+def _wait_for_render(timeout_ms=15000):
+    """Block until the canvas finishes its current render, up to timeout_ms.
+
+    Uses a single-shot connection to canvas.renderComplete to break out of a
+    local QEventLoop. Falls back to timeout if no render is in flight.
+    """
     loop = QEventLoop()
-    done = [False]
+    finished = [False]
 
-    def _on_render_finished(_ok):
-        if not done[0]:
-            done[0] = True
+    def _on_render_done(_ok):
+        if not finished[0]:
+            finished[0] = True
             loop.quit()
 
     try:
-        canvas.renderComplete.connect(_on_render_finished)
-        QTimer.singleShot(timeout_ms, loop.quit)
-        loop.exec_()
-    finally:
-        try:
-            canvas.renderComplete.disconnect(_on_render_finished)
-        except (TypeError, RuntimeError):
-            pass
+        canvas.renderComplete.connect(_on_render_done)
+    except (TypeError, RuntimeError):
+        # If a connection is already in place, that's fine — disconnect
+        # attempts below will handle it.
+        pass
+    timer = QTimer()
+    timer.setSingleShot(True)
+    timer.timeout.connect(loop.quit)
+    timer.start(timeout_ms)
+    loop.exec_()
+    timer.stop()
+    try:
+        canvas.renderComplete.disconnect(_on_render_done)
+    except (TypeError, RuntimeError):
+        pass
 
 
-def capture_canvas_synchronously(out_path):
-    """Force a redraw and wait for it to complete, then snapshot the canvas.
+def trigger_redraw_and_capture(out_path):
+    """Trigger a redraw on the main thread canvas and save the result.
 
-    The QGIS API does not guarantee that canvas.saveAsImage() captures the
-    most recent layer-state change — it can return before the render job
-    finishes. To make sure the saved PNG reflects the *current* layer
-    visibility, we trigger refreshAllLayers() and block on renderComplete.
+    Steps:
+      1. canvas.refreshAllLayers()  -> schedules a new render.
+      2. _wait_for_render()          -> blocks on renderComplete signal.
+      3. canvas.saveAsImage(path)    -> saves the latest rendered canvas.
     """
     canvas.refreshAllLayers()
-    # Force a synchronous render pass via mapSettings job (this blocks)
-    map_settings = canvas.mapSettings()
-    image = QImage(map_settings.outputSize(), QImage.Format_ARGB32)
-    image.fill(QColor(255, 255, 255))
-    job = QgsMapRendererCustomPainterJob(map_settings, QPainter(image))
-    job.start()
-    job.waitForFinished()
-    del job
-    image.save(out_path, "PNG")
-    # Also let the live canvas finish its pending render for consistency
+    # Pump the event loop briefly so the render job is actually kicked off
+    # before we start waiting. Otherwise the first call may exit immediately.
+    wait_loop = QEventLoop()
+    QTimer.singleShot(50, wait_loop.quit)
+    wait_loop.exec_()
     _wait_for_render()
+    canvas.saveAsImage(out_path, None, "PNG")
+    # Small extra wait to let any pending UI events settle
+    settle_loop = QEventLoop()
+    QTimer.singleShot(50, settle_loop.quit)
+    settle_loop.exec_()
 
 
 # -- Main loop ----------------------------------------------------------
@@ -128,6 +142,9 @@ def main():
     print("=" * 70)
     print("Feature counts (GeoTIFF source: Google Satellite z19 download)")
     print("Base raster: merged_canvas0.5mpx_google_z19.tif (0.298 m/px)")
+    print("=" * 70)
+    print("WARNING: stop any background QGIS jobs (tile download, processing)")
+    print("         before running this script — concurrent renders crash.")
     print("=" * 70)
 
     saved_layer_ids = all_vector_layer_ids()
@@ -141,8 +158,15 @@ def main():
         lyr = project.mapLayer(target_id)
         count = lyr.featureCount()
         out_path = os.path.join(IMGS_DIR, filename)
-        capture_canvas_synchronously(out_path)
-        size_kb = os.path.getsize(out_path) / 1024
+        try:
+            trigger_redraw_and_capture(out_path)
+        except Exception as exc:
+            print(f"[ERROR] {label}: render failed: {exc}")
+            # Restore visibility before bailing
+            restore_all_visibility(saved_layer_ids)
+            canvas.refreshAllLayers()
+            raise
+        size_kb = os.path.getsize(out_path) / 1024 if os.path.exists(out_path) else 0
         print(f"[OK] {label}")
         print(f"     layer:         {layer_name}")
         print(f"     feature count: {count}")
