@@ -81,8 +81,18 @@ class minmax:
         self.maximum = maximum
 
 def detect_palm(model, ds, x, y, winW, winH, minmaxlist, scorethreshold):
-    # crop image
-    a_image = ds.ReadAsArray(x, y, winW, winH)
+    # crop image — clamp negative offsets and pad when raster is smaller than window
+    x_off = max(0, x)
+    y_off = max(0, y)
+    actual_w = min(winW, ds.RasterXSize - x_off)
+    actual_h = min(winH, ds.RasterYSize - y_off)
+    if actual_w <= 0 or actual_h <= 0:
+        return
+    a_image = ds.ReadAsArray(x_off, y_off, actual_w, actual_h)
+    if actual_w < winW or actual_h < winH:
+        padded = np.zeros((ds.RasterCount, winH, winW), dtype=a_image.dtype)
+        padded[:, :actual_h, :actual_w] = a_image
+        a_image = padded
     datatype = ds.GetRasterBand(1).DataType
 
     normalizedImg = []
@@ -127,15 +137,22 @@ def detect_palm(model, ds, x, y, winW, winH, minmaxlist, scorethreshold):
     # select detections
     image_boxes = boxes[0, indices[scores_sort], :]
 
+    kept_scores = []
     for i in range(len(image_boxes)):
         b = np.array(image_boxes[i,:]).astype(int)
-        x1 = b[0] + x
-        y1 = b[1] + y
-        x2 = b[2] + x
-        y2 = b[3] + y
+        # skip detections whose top-left falls entirely in the zero-padded region
+        if b[0] >= actual_w or b[1] >= actual_h:
+            continue
+        # clip bottom-right corner to the real data boundary
+        x1 = b[0] + x_off
+        y1 = b[1] + y_off
+        x2 = min(b[2], actual_w) + x_off
+        y2 = min(b[3], actual_h) + y_off
         bboxes.append([x1, y1, x2, y2])
+        kept_scores.append(scores[i])
 
-    scoreses.append(scores)
+    if kept_scores:
+        scoreses.append(np.array(kept_scores))
 
 def geom_type(argument):
     switcher = {
@@ -176,14 +193,14 @@ class OptimalIpbAlgorithm(QgsProcessingAlgorithm):
         """
         modelsList.clear()
         models_dir = os.path.join(cmd_folder, 'models')
-        QgsMessageLog.logMessage(f'OPTIMAL-IPB: cmd_folder={cmd_folder}', 'OPTIMAL-IPB')
+        QgsMessageLog.logMessage(f'cmd_folder={cmd_folder}', 'Optimal-IPB')
         try:
             for file in os.listdir(models_dir):
                 if file.endswith(".onnx"):
                     modelsList.append(file)
         except Exception as e:
-            QgsMessageLog.logMessage(f'OPTIMAL-IPB: models dir error: {e}', 'OPTIMAL-IPB')
-        QgsMessageLog.logMessage(f'OPTIMAL-IPB: models found={modelsList}', 'OPTIMAL-IPB')
+            QgsMessageLog.logMessage(f'models dir error: {e}', 'Optimal-IPB')
+        QgsMessageLog.logMessage(f'models found={modelsList}', 'Optimal-IPB')
 
         # We add the input vector features source. It can have any kind of
         # geometry.

@@ -1,0 +1,63 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+.env
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Local tooling state
+.claude/
+.worktrees/
+
+# TensorFlow / Keras model directories
+Google-Resnet101-savedmodel/
+*_savedmodel/
+
+# Sample data — large rasters, downloaded separately
+tif_online_samples/
+sample_data_qgis/output_*/
+sample_data_qgis/**/*.tif
+sample_data_qgis/**/*_extent.txt
+
+# Test outputs / cache
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# QGIS project state
+*.qgs~
+*.qgz~
+.qgis2/
+.qgis3/
