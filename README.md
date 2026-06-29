@@ -59,33 +59,33 @@ Afterward you can input your raster layer then select model previously downloade
 
 ## Performance on 0.30 m/px (Google z19) merged canvas
 
-The three RetinaNet models were tested on `sample_data_qgis/output_canvas0.5mpx_google_z19/merged_canvas0.5mpx_google_z19.tif` (GSD = 0.298 m/px, 70 tiles merged, 100% quality). Results below are ranked by mAP@0.5 on this test raster.
+The three RetinaNet models were tested on `sample_data_qgis/output_canvas0.5mpx_google_z19/merged_canvas0.5mpx_google_z19.tif` (GSD = 0.298 m/px, 70 tiles merged, 100% quality). **The base GeoTIFF layer is a download from Google Satellite at zoom level 19 (z19).** Results below are ranked by mAP@0.5 on this test raster.
 
 ### Best performance (in order)
 
-| Rank | Model | mAP@0.5 | Detection output layer | Base raster |
-|------|-------|---------|------------------------|-------------|
-| 1 | **Geoeye-Resnet101** | **0.50** | `0.30mpx_z19_GeoEye_mAP0.50_(pt).gpkg` | `merged_canvas0.5mpx_google_z19_clean.tif` |
-| 2 | **Google-Resnet101** | **0.30** | `0.30mpx_z19_googleresnet_mAP0.30_(pt).gpkg` | `merged_canvas0.5mpx_google_z19_clean.tif` |
-| 3 | **Pleiades-Resnet101** | **0.20** | `0.30mpx_z19_Pleiaedes_mAP0.20_(pt).gpkg` | `merged_canvas0.5mpx_google_z19_clean.tif` |
+| Rank | Model | mAP@0.5 | Feature count | Detection output layer | Base raster |
+|------|-------|---------|---------------|------------------------|-------------|
+| 1 | **Geoeye-Resnet101** | **0.50** | _populate_ | `0.30mpx_z19_GeoEye_mAP0.50_(pt).gpkg` | `merged_canvas0.5mpx_google_z19_clean.tif` (Google z19 download) |
+| 2 | **Google-Resnet101** | **0.30** | _populate_ | `0.30mpx_z19_googleresnet_mAP0.30_(pt).gpkg` | `merged_canvas0.5mpx_google_z19_clean.tif` (Google z19 download) |
+| 3 | **Pleiades-Resnet101** | **0.20** | _populate_ | `0.30mpx_z19_Pleiaedes_mAP0.20_(pt).gpkg` | `merged_canvas0.5mpx_google_z19_clean.tif` (Google z19 download) |
 
 ### Case 1 — GeoEye-Resnet101 (mAP@0.5 = 0.50)
 
 <img src='imgs/case1_geoeye_30mpx_z19.png' alt='0.30mpx z19 — GeoEye-Resnet101 mAP@0.5'>
 
-*Overlay layers: `0.30mpx_z19_GeoEye_mAP0.50_(pt)` over base `merged_canvas0.5mpx_google_z19_clean`*
+*Overlay layers: `0.30mpx_z19_GeoEye_mAP0.50_(pt)` over base `merged_canvas0.5mpx_google_z19_clean` (Google Satellite z19 download)*
 
 ### Case 2 — Google-Resnet101 (mAP@0.5 = 0.30)
 
 <img src='imgs/case2_googleresnet_30mpx_z19.png' alt='0.30mpx z19 — Google-Resnet101 mAP@0.5'>
 
-*Overlay layers: `0.30mpx_z19_googleresnet_mAP0.30_(pt)` over base `merged_canvas0.5mpx_google_z19_clean`*
+*Overlay layers: `0.30mpx_z19_googleresnet_mAP0.30_(pt)` over base `merged_canvas0.5mpx_google_z19_clean` (Google Satellite z19 download)*
 
 ### Case 3 — Pléiades-Resnet101 (mAP@0.5 = 0.20)
 
 <img src='imgs/case3_pleiades_30mpx_z19.png' alt='0.30mpx z19 — Pléiades-Resnet101 mAP@0.5'>
 
-*Overlay layers: `0.30mpx_z19_Pleiaedes_mAP0.20_(pt)` over base `merged_canvas0.5mpx_google_z19_clean`*
+*Overlay layers: `0.30mpx_z19_Pleiaedes_mAP0.20_(pt)` over base `merged_canvas0.5mpx_google_z19_clean` (Google Satellite z19 download)*
 
 ### Combined results — all models
 
@@ -100,7 +100,9 @@ The three RetinaNet models were tested on `sample_data_qgis/output_canvas0.5mpx_
 
 > **Takeaway:** The three medium-resolution (50 cm/px) RetinaNet models are usable on 0.30 m/px (z19) imagery, but mAP drops significantly from the original training mAP (~0.90) to a 0.20–0.50 range. For higher-accuracy counting, VHR (≤15 cm/px) imagery with a VHR-trained model is required.
 
-> **Note on feature counts and screenshots:** Feature counts and per-case feature counts are pending — populate the rows above with `featureCount(<output_layer>)` results from QGIS Python Console, and replace `imgs/case*.png` placeholders with saved QGIS canvas screenshots (Project → Import/Export → Export Map to Image).
+> **Data source:** All detection layers were generated from `merged_canvas0.5mpx_google_z19.tif` — a GeoTIFF downloaded via Google Satellite at zoom level 19 (z19, 0.298 m/px GSD), 70 tiles merged at 100% quality.
+>
+> **Capture script:** Run `scripts/capture_readme_screenshots.py` from the QGIS Python Console (Plugins → Python Console → Editor → open file → Run) to automatically: (1) hide all vector layers, (2) show only the active case layer, (3) capture the canvas to `imgs/case1/2/3_*.png`, (4) print feature counts for each case, (5) restore layer visibility.
 
 ## Sources
 
