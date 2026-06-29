@@ -65,9 +65,9 @@ The three RetinaNet models were tested on `sample_data_qgis/output_canvas0.5mpx_
 
 | Rank | Model | mAP@0.5 | Feature count | Detection output layer | Base raster |
 |------|-------|---------|---------------|------------------------|-------------|
-| 1 | **Geoeye-Resnet101** | **0.50** | _populate_ | `0.30mpx_z19_GeoEye_mAP0.50_(pt).gpkg` | `merged_canvas0.5mpx_google_z19_clean.tif` (Google z19 download) |
-| 2 | **Google-Resnet101** | **0.30** | _populate_ | `0.30mpx_z19_googleresnet_mAP0.30_(pt).gpkg` | `merged_canvas0.5mpx_google_z19_clean.tif` (Google z19 download) |
-| 3 | **Pleiades-Resnet101** | **0.20** | _populate_ | `0.30mpx_z19_Pleiaedes_mAP0.20_(pt).gpkg` | `merged_canvas0.5mpx_google_z19_clean.tif` (Google z19 download) |
+| 1 | **Geoeye-Resnet101** | **0.50** | **6523** | `0.30mpx_z19_GeoEye_mAP0.50_(pt).gpkg` | `merged_canvas0.5mpx_google_z19_clean.tif` (Google z19 download) |
+| 2 | **Google-Resnet101** | **0.30** | **3827** | `0.30mpx_z19_googleresnet_mAP0.30_(pt).gpkg` | `merged_canvas0.5mpx_google_z19_clean.tif` (Google z19 download) |
+| 3 | **Pleiades-Resnet101** | **0.20** | **1841** | `0.30mpx_z19_Pleiaedes_mAP0.20_(pt).gpkg` | `merged_canvas0.5mpx_google_z19_clean.tif` (Google z19 download) |
 
 ### Case 1 — GeoEye-Resnet101 (mAP@0.5 = 0.50)
 
