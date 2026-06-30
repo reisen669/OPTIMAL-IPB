@@ -45,6 +45,63 @@ There are three models that have been trained using Backbone Resnet101. You can 
 
 Copy all models you downloads to your plugin directory. Eg: `C:\Users\Username\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\optimal-ipb\models`.
 
+#### All supported ONNX checkpoints (sources + conversion)
+
+The plugin and companion Deepness plugin recognise 6 ONNX checkpoints. The `.h5` source files were saved with Keras 2.4.3 + TensorFlow 2.3.0; converting them in modern environments (TF 2.10+) requires the `tf_keras` shim and custom_objects for keras-retinanet's `BatchNormFreeze` and `UpsampleLike` layers.
+
+| File (target location) | Size | Source | Architecture | GSD | Notes |
+|------------------------|------|--------|--------------|-----|-------|
+| `models/Google-Resnet101.onnx` | 212 MB | [Google-Resnet101.h5](https://github.com/p4wlppmipb/OPTIMAL-IPB/releases/download/0.1/Google-Resnet101.h5) | RetinaNet + ResNet-101 | ~50 cm/px | Run `python models/convert_h5_to_onnx.py` in `keras23_env` |
+| `models/Geoeye-Resnet101.onnx` | 212 MB | [Geoeye-Resnet101.h5](https://github.com/p4wlppmipb/OPTIMAL-IPB/releases/download/0.1/Geoeye-Resnet101.h5) | RetinaNet + ResNet-101 | ~50 cm/px | Same converter |
+| `models/Pleiades-Resnet101.onnx` | 212 MB | [Pleiades-Resnet101.h5](https://github.com/p4wlppmipb/OPTIMAL-IPB/releases/download/0.1/Pleiades-Resnet101.h5) | RetinaNet + ResNet-101 | ~50 cm/px | Same converter |
+| `models/tree_tops_yolov9.onnx` | 194 MB | [Deepness model zoo](https://chmura.put.poznan.pl/s/A9zdp4mKAATEAGu) — `tree_tops_yolov9.onnx` | YOLOv9 | 10 cm/px training | Pre-converted ONNX, copy directly |
+| `models/tribber93_yolov11_palm.onnx` | 37 MB | [HuggingFace tribber93/yolov11-palm-oil-tree](https://huggingface.co/tribber93/yolov11-palm-oil-tree) | YOLOv11 | 5–15 cm/px (unconfirmed) | Download `.pt`, then `YOLO('tribber93_yolov11_palm.pt').export(format='onnx', opset=13)` |
+| `models/mopad/MOPAD_epoch_24.onnx` | 232 MB | [rs-dl/MOPAD GitHub](https://github.com/rs-dl/MOPAD) (Baidu Wangpan code `8mwa` Site 1 or `7n61` Site 2) | Faster R-CNN + ResNet-101 + RPF | 5–10 cm/px | Download `latest.pth` → `models/mopad/MOPAD_epoch_24.pth`, then export with mmdet |
+| `models/mopad/MOPAD_epoch_24.pth` | 463 MB | (same source as above) | PyTorch state dict | n/a | Original training checkpoint — for re-export / fine-tuning |
+
+#### Required environment for `.h5` → ONNX conversion
+
+The three RetinaNet `.h5` files were saved with the original development environment and fail to deserialize with Keras 3 / TF 2.10+. Use the dedicated conda env at `C:\SuperMap\supermap-iobjectspy-env-gpu-2025-win64\conda\envs\keras23_env\python.exe`:
+
+- TensorFlow 2.3.0
+- Keras 2.4.3
+- tf2onnx 1.14.0
+- The plugin's vendored `keras_retinanet/` and `keras_resnet/` packages (added to sys.path by the converter)
+
+#### Conversion commands
+
+```bash
+# Download the three .h5 files (212 MB each)
+mkdir -p models/h5_sources
+curl -L -o models/h5_sources/Google-Resnet101.h5 \
+    https://github.com/p4wlppmipb/OPTIMAL-IPB/releases/download/0.1/Google-Resnet101.h5
+curl -L -o models/h5_sources/Geoeye-Resnet101.h5 \
+    https://github.com/p4wlppmipb/OPTIMAL-IPB/releases/download/0.1/Geoeye-Resnet101.h5
+curl -L -o models/h5_sources/Pleiades-Resnet101.h5 \
+    https://github.com/p4wlppmipb/OPTIMAL-IPB/releases/download/0.1/Pleiades-Resnet101.h5
+
+# Convert all three to ONNX (uses keras_retinanet + keras_resnet custom layers)
+"C:\SuperMap\supermap-iobjectspy-env-gpu-2025-win64\conda\envs\keras23_env\python.exe" \
+    models/convert_h5_to_onnx.py
+
+# Download Deepness tree-tops YOLOv9 (pre-converted ONNX, 194 MB)
+curl -L -o models/tree_tops_yolov9.onnx \
+    "https://chmura.put.poznan.pl/s/A9zdp4mKAATEAGu/download?path=%2F&files=tree_tops_yolov9.onnx"
+
+# Download tribber93 YOLOv11 palm + export to ONNX
+pip install ultralytics
+curl -L -o tribber93_yolov11_palm.pt \
+    https://huggingface.co/tribber93/yolov11-palm-oil-tree/resolve/main/best.pt
+python -c "from ultralytics import YOLO; YOLO('tribber93_yolov11_palm.pt').export(format='onnx', opset=13)"
+# Output: tribber93_yolov11_palm.onnx → rename to models/tribber93_yolov11_palm.onnx
+
+# Download MOPAD PyTorch checkpoint + export (requires mmdet + qgis_mmcv_env)
+# Access codes: 8mwa for Site 1, 7n61 for Site 2 (Baidu Wangpan)
+# Then: see models/export_e1_onnx.py for the export template
+```
+
+> **Note:** The pre-converted `.onnx` files are not committed to this repository because GitHub free-tier rejects single pushes over ~100 MB with HTTP 408. Models live on the user's local filesystem after running the download steps above.
+
 ## Usage
 
 This plugin can be accessed under Plugins menu, then select `Calculate > OPTIMAL-IPB` or in the Processing Toolbox, then select `OPTIMAL-IPB > OPTIMAL-IPB` as shown in the image below:
