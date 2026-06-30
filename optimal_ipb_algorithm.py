@@ -268,7 +268,7 @@ class OptimalIpbAlgorithm(QgsProcessingAlgorithm):
         model_name = modelsList[self.parameterAsEnum(parameters, self.OPTIMAL, context)]
         model = ort.InferenceSession(
             os.path.join(cmd_folder, 'models', model_name),
-            providers=['CPUExecutionProvider']
+            providers=['CUDAExecutionProvider', 'CPUExecutionProvider']
         )
 
         # get CRS from raster source
