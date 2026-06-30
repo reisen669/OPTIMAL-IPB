@@ -75,17 +75,35 @@ The three RetinaNet models were tested on `sample_data_qgis/output_canvas0.5mpx_
 
 *Overlay layers: `0.30mpx_z19_GeoEye_mAP0.50_(pt)` over base `merged_canvas0.5mpx_google_z19_clean` (Google Satellite z19 download)*
 
+#### Full canvas view (case 1)
+
+<img src='imgs/full_case1_geoeye_30mpx_z19.png' alt='Full 0.30mpx z19 canvas — GeoEye-Resnet101 mAP@0.5'>
+
+*Full extent of the merged_canvas0.5mpx_google_z19_clean tile with all GeoEye detections visible — shows density of palm detections across the full study area.*
+
 ### Case 2 — Google-Resnet101 (mAP@0.5 = 0.30)
 
 <img src='imgs/case2_googleresnet_30mpx_z19.png' alt='0.30mpx z19 — Google-Resnet101 mAP@0.5'>
 
 *Overlay layers: `0.30mpx_z19_googleresnet_mAP0.30_(pt)` over base `merged_canvas0.5mpx_google_z19_clean` (Google Satellite z19 download)*
 
+#### Full canvas view (case 2)
+
+<img src='imgs/full_case2_googleresnet_30mpx_z19.png' alt='Full 0.30mpx z19 canvas — Google-Resnet101 mAP@0.5'>
+
+*Full extent of the merged_canvas0.5mpx_google_z19_clean tile with all Google-Resnet101 detections visible — shows density of palm detections across the full study area.*
+
 ### Case 3 — Pléiades-Resnet101 (mAP@0.5 = 0.20)
 
 <img src='imgs/case3_pleiades_30mpx_z19.png' alt='0.30mpx z19 — Pléiades-Resnet101 mAP@0.5'>
 
 *Overlay layers: `0.30mpx_z19_Pleiaedes_mAP0.20_(pt)` over base `merged_canvas0.5mpx_google_z19_clean` (Google Satellite z19 download)*
+
+#### Full canvas view (case 3)
+
+<img src='imgs/full_case3_pleiades_30mpx_z19.png' alt='Full 0.30mpx z19 canvas — Pléiades-Resnet101 mAP@0.5'>
+
+*Full extent of the merged_canvas0.5mpx_google_z19_clean tile with all Pléiades-Resnet101 detections visible — shows density of palm detections across the full study area.*
 
 ### Combined results — all models
 
